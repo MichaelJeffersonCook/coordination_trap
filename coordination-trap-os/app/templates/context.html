@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Context · AI-Native Product OS{% endblock %}
+{% block nav_context %}active{% endblock %}
+{% set labels = {"org_profile": "Who we are", "positioning": "Positioning / desired role in the ecosystem",
+                 "principle": "Curation principles", "rule": "Rules / guardrails"} %}
+{% block content %}
+<section class="hero">
+  <h1>Organizational Context</h1>
+  <p class="muted">The <strong>Memory + Rules</strong> layer — standing knowledge humans author once and maintain:
+  what we're building, who our customers are, where we want to fit in the market, who we compete with, and the
+  principles and guardrails the agents must respect. Every agent reasons <em>with</em> this; it does not come from a system of record.</p>
+</section>
+
+<section class="card">
+  <h2>Add / edit context (leadership · PM · marketing input)</h2>
+  <form method="post" action="/context-ui/add" class="goal-add">
+    <select name="type">
+      {% for t in types %}<option value="{{ t }}">{{ labels[t] }}</option>{% endfor %}
+    </select>
+    <input type="text" name="title" placeholder="title (e.g. 'Mid-market fintech (ICP)')" required>
+    <input type="text" name="key" placeholder="field (e.g. where_we_win)">
+    <input type="text" name="detail" placeholder="value / note">
+    <button class="btn">Save</button>
+  </form>
+  <p class="muted small">Same endpoint (<code>POST /context</code>) that n8n calls when syncing from Google Docs / Confluence.</p>
+</section>
+
+{% for t in types %}
+{% if context[t] %}
+<section class="card">
+  <h2>{{ labels[t] }}</h2>
+  {% for n in context[t] %}
+  <div class="ctx-item">
+    <div class="ctx-head"><span class="chip ctx-{{ t }}">{{ t.replace('_',' ') }}</span>
+      <strong>{{ n.title }}</strong>
+      {% if n.data.is_icp %}<span class="badge status-active">ICP</span>{% endif %}
+      {% if n.data.threat_level %}<span class="badge sev-{{ 'high' if n.data.threat_level=='high' else 'low' }}">threat: {{ n.data.threat_level }}</span>{% endif %}
+    </div>
+    <ul class="ctx-fields">
+      {% for k, v in n.data.items() %}
+      <li><span class="muted small">{{ k.replace('_',' ') }}:</span>
+        {% if v is iterable and v is not string %}{{ v | join(', ') }}{% else %}{{ v }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+    {% if histories.get(n.id) %}
+    <details class="ctx-history">
+      <summary class="muted small">✎ edited {{ histories[n.id]|length }}× — history</summary>
+      <ul class="ctx-fields">
+        {% for h in histories[n.id] %}
+        <li class="muted small">v{{ h.version }} ({{ h.actor }}, {{ h.ts[:16] }}): “{{ h.title }}” [{{ h.status }}]</li>
+        {% endfor %}
+      </ul>
+    </details>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+{% endfor %}
+{% endblock %}

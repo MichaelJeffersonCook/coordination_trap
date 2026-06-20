@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Operating Model · Golden Gate OS{% endblock %}
+{% block nav_model %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Operating Model</h1>
+  <p class="muted">Four levels. Humans set direction and make the calls; agents do the coordination; n8n moves the data.</p>
+</section>
+
+<!-- LEVEL 1 -->
+<section class="level-band">
+  <div class="level-tag"><span class="lvl">L1</span> Human Roles</div>
+  <p class="muted small">Each role is a job description the system catalogs — what the role owns and decides. <a href="/roles">Manage roles →</a></p>
+  <div class="chips">
+    {% for r in roles %}
+    <a class="lvl-card c1" href="/roles/{{ r.id }}">
+      <strong>{{ r.title }}</strong>
+      <span class="muted small">{{ r.data.person_name }}</span>
+      <span class="muted small">{{ r.data.responsibilities|length }} responsibilities · {{ r.data.owns|length }} goals</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+<div class="band-link"><span>push events ↑&nbsp;&nbsp;guidance ↓</span></div>
+
+<!-- LEVEL 2 -->
+<section class="level-band">
+  <div class="level-tag"><span class="lvl">L2</span> Partner Agents</div>
+  <p class="muted small">One partner per role — the human's interface to the org. Push events land here with recommended responses. <a href="/partners">Open inboxes →</a></p>
+  <div class="chips">
+    {% for r in roles %}
+    {% set c = counts.get(r.id, {"open":0,"total":0}) %}
+    <a class="lvl-card c2" href="/roles/{{ r.id }}">
+      <strong>{{ r.data.partner_agent }}</strong>
+      <span class="muted small">for {{ r.title }}</span>
+      <span class="badge {{ 'sev-high' if c.open else 'sev-low' }}">{{ c.open }} open · {{ c.total }} total</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+<div class="band-link"><span>compose findings ↑</span></div>
+
+<!-- LEVEL 3 -->
+<section class="level-band">
+  <div class="level-tag"><span class="lvl">L3</span> Shared Service Agents</div>
+  <p class="muted small">Cross-cutting coordination services every partner agent draws on. <a href="/services">See roster →</a></p>
+  <div class="svc-group"><span class="muted small">Coordination</span>
+    <div class="chips">
+      {% for s in services if s.group == 'Coordination' %}
+      <a class="chip svc" href="/services"><span class="dot {{ 'on' if s.live else 'off' }}"></span>{{ s.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="svc-group"><span class="muted small">Domain</span>
+    <div class="chips">
+      {% for s in services if s.group == 'Domain' %}
+      <a class="chip svc" href="/services"><span class="dot on"></span>{{ s.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<div class="band-link"><span>trigger ↑&nbsp;&nbsp;data ↓</span></div>
+
+<!-- LEVEL 4 -->
+<section class="level-band">
+  <div class="level-tag"><span class="lvl">L4</span> n8n Automation &amp; Systems</div>
+  <p class="muted small">Workflows that wire the service agents to company systems. <a href="/automations">See workflows →</a></p>
+  <div class="chips">{% for w in workflows %}<span class="chip svc">{{ w.name }}</span>{% endfor %}</div>
+  <div class="chips" style="margin-top:8px">{% for s in systems %}<span class="chip sys">{{ s.name }}</span>{% endfor %}</div>
+</section>
+
+<section class="card">
+  <h2>Detail views</h2>
+  <p class="muted small">Read-only lenses on the same Work Graph the four levels operate on — not a separate level. Each level page also links to the views relevant to it.</p>
+  <div class="svc-group"><span class="muted small">Leadership &amp; briefings</span>
+    <div class="chips">
+      <a class="chip" href="/executive">Executive Overview</a>
+      <a class="chip" href="/briefing">Daily Brief</a>
+      <a class="chip" href="/decisions">Decisions</a>
+      <a class="chip" href="/followups">Follow-Ups</a>
+      <a class="chip" href="/approvals-ui">Approvals</a>
+    </div>
+  </div>
+  <div class="svc-group"><span class="muted small">Direction &amp; memory</span>
+    <div class="chips">
+      <a class="chip" href="/goals-ui">Goals</a>
+      <a class="chip" href="/context-ui">Context</a>
+    </div>
+  </div>
+  <div class="svc-group"><span class="muted small">Network &amp; graph</span>
+    <div class="chips">
+      <a class="chip" href="/community">Community</a>
+      <a class="chip" href="/events">Events</a>
+      <a class="chip" href="/invitations">Invitations</a>
+      <a class="chip" href="/attendees">Attendees</a>
+      <a class="chip" href="/topics">Topics</a>
+      <a class="chip" href="/speakers">Speakers</a>
+      <a class="chip" href="/graph">Relationship Graph</a>
+      <a class="chip" href="/workgraph-ui">Work Graph</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

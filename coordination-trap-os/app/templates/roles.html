@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Roles · Golden Gate OS{% endblock %}
+{% block nav_roles %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Human Roles</h1>
+  <p class="muted">Level 1 — the job descriptions the system catalogs: what each role owns and decides. Creating a role automatically provisions its <span class="lvl">L2</span> partner agent.</p>
+  <div class="related"><span class="muted small">Related views:</span>
+    <a class="chip" href="/goals-ui">Goals they own</a>
+    <a class="chip" href="/context-ui">Context &amp; rules</a>
+    <a class="chip" href="/partners">All partner agents →</a>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Add a role <span class="muted small">(its partner agent is created with it)</span></h2>
+  <form method="post" action="/roles-ui/save" class="goal-add">
+    <input type="text" name="title" placeholder="Role title (e.g. Head of Partnerships)" required>
+    <input type="text" name="person_name" placeholder="Person">
+    <input type="text" name="partner_agent" placeholder="Partner agent name (optional — auto-named if blank)">
+    <textarea name="responsibilities" placeholder="Responsibilities — one per line" rows="3"></textarea>
+    <textarea name="decision_authority" placeholder="Decision authority — one per line" rows="2"></textarea>
+    <button class="btn">Save role</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Roles</h2>
+  <div class="chips">
+    {% for r in roles %}
+    {% set c = counts.get(r.id, {"open":0,"total":0}) %}
+    <a class="lvl-card c1" href="/roles/{{ r.id }}">
+      <strong>{{ r.title }}</strong>
+      <span class="muted small">{{ r.data.person_name }}</span>
+      <span class="muted small">partner: {{ r.data.partner_agent }}</span>
+      <span class="muted small">{{ r.data.responsibilities|length }} responsibilities · {{ r.data.owns|length }} goals</span>
+      <span class="badge {{ 'sev-high' if c.open else 'sev-low' }}">{{ c.open }} open events</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

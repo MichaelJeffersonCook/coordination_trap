@@ -1,0 +1,23 @@
+{
+  "_source": "Cross-system change feed (last 24h): Attio, AI news, policy trackers, invitation tracker",
+  "events": [
+    {"actor": "system:news", "kind": "observation", "node_id": "person:mira",
+     "summary": "Mira left OpenAI last month to found an evals startup (EvalWorks) — her Attio profile still lists OpenAI.",
+     "data": {"delta": "job_change"}},
+    {"actor": "system:research", "kind": "observation", "node_id": "person:emerging-interp",
+     "summary": "Neel's interpretability work is the most-cited frontier-safety result this quarter — rising influence.",
+     "data": {"delta": "emerging_influence"}},
+    {"actor": "system:policy", "kind": "observation", "node_id": "policy:oversight-bill",
+     "summary": "US Frontier Model Oversight Act advanced to committee draft; Sara (Senate staff) is the lead author.",
+     "data": {"delta": "policy_movement"}},
+    {"actor": "system:news", "kind": "observation", "node_id": "topic:open-weights",
+     "summary": "A major lab shipped open weights for a frontier-class model — open-weights norms are suddenly the hottest governance topic.",
+     "data": {"delta": "topic_heat"}},
+    {"actor": "system:attio", "kind": "observation", "node_id": "inv:demis",
+     "summary": "Demis (Google DeepMind) invitation still unanswered after 50 days — VIP RSVP at risk.",
+     "data": {"delta": "rsvp_risk"}},
+    {"actor": "system:attio", "kind": "observation", "node_id": "person:eu-official",
+     "summary": "EU AI Office invite unanswered (42 days) and her Attio profile is missing title/contact fields.",
+     "data": {"delta": "rsvp_risk_data_gap"}}
+  ]
+}

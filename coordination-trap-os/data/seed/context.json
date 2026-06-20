@@ -1,0 +1,68 @@
+{
+  "_source": "Strategy memos / positioning doc / curation principles (Google Docs) — authored in-OS or synced via n8n",
+  "nodes": [
+    {
+      "id": "ctx:org",
+      "type": "org_profile",
+      "title": "Golden Gate Institute for AI",
+      "status": "active",
+      "data": {"what_we_do": "A nonprofit that convenes influential leaders across the AI ecosystem through dinners, salons, workshops, invite-only gatherings, and The Curve conference.",
+               "primary_asset": "The network of relationships among influential people in the AI ecosystem.",
+               "not_for": "General business audiences."}
+    },
+    {
+      "id": "ctx:positioning",
+      "type": "positioning",
+      "title": "The trusted convener of frontier-AI governance dialogue",
+      "status": "active",
+      "data": {"differentiation": "Small, high-trust, off-the-record rooms where frontier-lab leadership, policymakers, and researchers actually talk to each other.",
+               "desired_role": "The default neutral ground for the hardest AI governance conversations.",
+               "signals_of_success": ["frontier-lab principals attend in person", "policymakers and labs in the same room", "viewpoint diversity, not an echo chamber"]}
+    },
+    {
+      "id": "ctx:prin-chatham",
+      "type": "principle",
+      "title": "Chatham House Rule by default; protect attendee trust above all",
+      "status": "active",
+      "data": {"concern": "trust", "detail": "No attribution without explicit consent. Journalists attend as participants, not reporters, unless agreed otherwise."}
+    },
+    {
+      "id": "ctx:prin-balance",
+      "type": "principle",
+      "title": "Every governance convening must hold genuine viewpoint balance",
+      "status": "active",
+      "data": {"concern": "viewpoint_diversity", "detail": "No single lab, ideology, or policy stance should dominate the room. Safety, accelerationist, and policy-skeptic voices all belong."}
+    },
+    {
+      "id": "ctx:prin-relationship-owner",
+      "type": "principle",
+      "title": "Every invitation flows through a known relationship",
+      "status": "active",
+      "data": {"concern": "warmth", "detail": "Cold invitations to senior figures damage trust. An invite needs a relationship owner who can make it personal."}
+    },
+    {
+      "id": "ctx:rule-vip-signoff",
+      "type": "rule",
+      "title": "Don't invite a frontier-lab principal or senior policymaker without a named relationship owner + Steve/Taren sign-off",
+      "status": "active",
+      "data": {"condition": "invitee seniority == principal AND community in (frontier-labs, policy)",
+               "constraint": "require relationship owner + Founder/CEO approval",
+               "applies_to_roles": ["COO", "President"]}
+    },
+    {
+      "id": "ctx:rule-balance-gate",
+      "type": "rule",
+      "title": "Hold a viewpoint-balance check before any list is finalized",
+      "status": "active",
+      "data": {"condition": "attendee list finalized for a governance event",
+               "constraint": "Network Gap Agent must clear viewpoint and community balance; imbalance escalates to the President"}
+    },
+    {
+      "id": "ctx:rule-privacy",
+      "type": "rule",
+      "title": "Never expose attendee lists or contact data outside the relationship owner without consent",
+      "status": "active",
+      "data": {"condition": "any attendee data leaves the OS", "constraint": "relationship-owner + privacy review"}
+    }
+  ]
+}

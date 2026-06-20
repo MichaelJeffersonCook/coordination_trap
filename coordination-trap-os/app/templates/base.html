@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Golden Gate · Relationship & Events OS{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <div>
+        <div class="brand-title">Golden Gate Institute · Relationship &amp; Events OS</div>
+        <div class="brand-sub">The Coordination Trap — agents coordinate, humans judge</div>
+      </div>
+    </div>
+    <nav class="nav-levels">
+      <a href="/" class="{% block nav_model %}{% endblock %}"><span class="lvl">L1–4</span> Operating Model</a>
+      <a href="/roles" class="{% block nav_roles %}{% endblock %}"><span class="lvl">L1</span> Roles</a>
+      <a href="/partners" class="{% block nav_partners %}{% endblock %}"><span class="lvl">L2</span> Partner Inboxes</a>
+      <a href="/services" class="{% block nav_services %}{% endblock %}"><span class="lvl">L3</span> Service Agents</a>
+      <a href="/automations" class="{% block nav_auto %}{% endblock %}"><span class="lvl">L4</span> Automations</a>
+    </nav>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>
+    Prototype · LLM provider: <code>{{ provider or 'mock' }}</code> ·
+    Four levels: human roles → partner agents → shared service agents → n8n automation.
+    Agents coordinate; humans judge.
+  </footer>
+</body>
+</html>

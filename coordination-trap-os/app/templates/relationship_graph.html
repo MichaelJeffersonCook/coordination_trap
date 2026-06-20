@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Relationship Graph · Golden Gate OS{% endblock %}
+{% block nav_graph %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Relationship Graph</h1>
+  <p class="muted">The Institute's primary asset: the web of relationships among influential people in the AI ecosystem.</p>
+</section>
+
+<section class="card">
+  <h2>Known relationships ({{ knows|length }})</h2>
+  <ul class="risks">
+    {% for k in knows %}<li><strong>{{ k.a }}</strong> ↔ <strong>{{ k.b }}</strong></li>{% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Introductions</h2>
+  <p class="muted small">Recommended introductions are pushed by the Relationship Facilitator Agent and recorded here by the Documentation Steward.</p>
+  <ul class="risks">
+    {% for i in intros %}
+    <li class="sev-{{ 'low' if i.status=='made' else 'medium' }}">
+      <span class="badge">{{ i.status }}</span> {{ i.title }}
+      {% if i.reason %}<br><span class="muted small">{{ i.reason }}</span>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

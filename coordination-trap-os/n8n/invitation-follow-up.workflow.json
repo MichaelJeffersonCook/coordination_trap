@@ -1,0 +1,21 @@
+{
+  "name": "Invitation Follow-Up",
+  "nodes": [
+    {"parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 9 * * 1-5"}]}},
+     "id": "sched", "name": "Every weekday 09:00", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.1, "position": [220, 300]},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/invitation/run", "options": {}},
+     "id": "inv", "name": "Run Invitation Agent", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [460, 300]},
+    {"parameters": {"conditions": {"options": {"caseSensitive": true}, "combinator": "and",
+        "conditions": [{"leftValue": "={{ $json.findings.rsvp_risks.length }}", "rightValue": 0, "operator": {"type": "number", "operation": "gt"}}]}},
+     "id": "iff", "name": "Any RSVP risks?", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [700, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-ops", "mode": "name"},
+       "text": "=VIP RSVPs at risk — relationship owners please follow up personally:\n{{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Alert relationship owners", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [940, 220]}
+  ],
+  "connections": {
+    "Every weekday 09:00": {"main": [[{"node": "Run Invitation Agent", "type": "main", "index": 0}]]},
+    "Run Invitation Agent": {"main": [[{"node": "Any RSVP risks?", "type": "main", "index": 0}]]},
+    "Any RSVP risks?": {"main": [[{"node": "Alert relationship owners", "type": "main", "index": 0}], []]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

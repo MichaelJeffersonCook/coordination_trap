@@ -1,0 +1,21 @@
+{
+  "name": "Attio Sync",
+  "nodes": [
+    {"parameters": {"rule": {"interval": [{"field": "hours", "hoursInterval": 6}]}},
+     "id": "sched", "name": "Every 6 hours", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.1, "position": [220, 300]},
+    {"parameters": {"method": "GET", "url": "http://host.docker.internal:8000/mock/sources/attio", "options": {}},
+     "id": "fetch", "name": "Fetch Attio People (mock)", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [460, 300],
+     "notes": "Replace with the real Attio node querying People + Lists."},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/relationship-intelligence/run", "options": {}},
+     "id": "ri", "name": "Run Relationship Intelligence", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [720, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-crm", "mode": "name"},
+       "text": "={{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Post data-quality alerts", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [980, 300]}
+  ],
+  "connections": {
+    "Every 6 hours": {"main": [[{"node": "Fetch Attio People (mock)", "type": "main", "index": 0}]]},
+    "Fetch Attio People (mock)": {"main": [[{"node": "Run Relationship Intelligence", "type": "main", "index": 0}]]},
+    "Run Relationship Intelligence": {"main": [[{"node": "Post data-quality alerts", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

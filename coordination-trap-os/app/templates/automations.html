@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Automations · Golden Gate OS{% endblock %}
+{% block nav_auto %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>n8n Automation &amp; Systems</h1>
+  <p class="muted">Level 4 — workflows that wire the service agents to company systems. Importable JSON lives in <code>n8n/</code>.</p>
+  <div class="related"><span class="muted small">Related views:</span>
+    <a class="chip" href="/services">↑ Service agents they serve</a>
+    <a class="chip" href="/workgraph-ui">Work Graph (where data lands)</a>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Workflows</h2>
+  <table class="tbl">
+    <tr><th>Workflow</th><th>Trigger</th><th>Service agents</th><th>Systems</th></tr>
+    {% for w in workflows %}
+    <tr>
+      <td><strong>{{ w.name }}</strong><br><span class="muted small"><code>{{ w.file }}</code></span></td>
+      <td class="muted small">{{ w.trigger }}</td>
+      <td class="muted small">{{ w.agents|join(', ') }}</td>
+      <td class="muted small">{{ w.systems|join(', ') }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section class="card">
+  <h2>Connected systems</h2>
+  <div class="chips">
+    {% for s in systems %}<span class="chip sys">{{ s.name }} <span class="muted small">· {{ s.kind }}</span></span>{% endfor %}
+  </div>
+  <p class="muted small" style="margin-top:10px">Each is mocked behind <code>GET /mock/sources/&lt;system&gt;</code>; swap in the real Attio / Sheets / Slack / RSS nodes and the pipeline is unchanged.</p>
+</section>
+{% endblock %}

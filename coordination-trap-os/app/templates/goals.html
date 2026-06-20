@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Goals · AI-Native Product OS{% endblock %}
+{% block nav_goals %}active{% endblock %}
+{% macro goal_node(g, people) %}
+  <li class="goal goal-{{ g.data.scope }} status-node-{{ g.status }}">
+    <div class="goal-head">
+      <span class="chip scope-{{ g.data.scope }}">{{ g.data.scope }}</span>
+      <strong>{{ g.title }}</strong>
+      <span class="badge status-{{ g.status }}">{{ g.status }}</span>
+    </div>
+    <div class="muted small">
+      Owner: {{ people.get(g.owner, g.data.owner_role or '—') }}
+      {% if g.data.metric %}· metric: {{ g.data.metric }} → {{ g.data.target }}{% endif %}
+    </div>
+    {% if g.data.rationale %}<div class="muted small rationale">“{{ g.data.rationale }}”</div>{% endif %}
+
+    {% if g.status == 'draft' %}
+    <form method="post" action="/goals-ui/{{ g.id }}/review" class="goal-form">
+      <input type="text" name="title" value="{{ g.title }}" />
+      <button name="decision" value="edit" class="btn btn-small btn-ghost">Save edit</button>
+      <button name="decision" value="approve" class="btn btn-small btn-approve">Approve</button>
+      <button name="decision" value="reject" class="btn btn-small btn-reject">Reject</button>
+    </form>
+    {% elif g.data.scope in ('company', 'department') %}
+    <form method="post" action="/goals-ui/{{ g.id }}/cascade" class="goal-form">
+      <button class="btn btn-small btn-ghost">⤵ Draft child goals (Strategy Agent)</button>
+    </form>
+    {% endif %}
+
+    {% if g.children %}
+    <ul class="goal-children">
+      {% for c in g.children %}{{ goal_node(c, people) }}{% endfor %}
+    </ul>
+    {% endif %}
+  </li>
+{% endmacro %}
+{% block content %}
+<section class="hero">
+  <h1>Goal Cascade</h1>
+  <p class="muted">Company goals (set by leadership) cascade to department and role goals.
+  The Strategy Agent drafts the cascade; each human owner reviews, edits and approves.
+  These goals feed the Finance Agent's prioritization, the Decision Facilitator's recommendations, and the Risk Watcher's strategic risks.</p>
+</section>
+
+<section class="card">
+  <h2>Author a company goal (leadership input)</h2>
+  <form method="post" action="/goals-ui/add" class="goal-add">
+    <input type="text" name="title" placeholder="e.g. Reach 1M monthly active users in FY26" required>
+    <select name="scope">
+      <option value="company">company</option>
+      <option value="department">department</option>
+      <option value="role">role</option>
+    </select>
+    <input type="text" name="owner_role" placeholder="owner role (e.g. Executive)">
+    <input type="text" name="parent" placeholder="parent goal id (optional)">
+    <button class="btn">Add goal</button>
+  </form>
+  <p class="muted small">Same endpoint (<code>POST /goals</code>) that n8n calls when syncing from an external OKR system.</p>
+</section>
+
+<section class="card">
+  <h2>The cascade</h2>
+  <ul class="goal-tree">
+    {% for g in goal_tree %}{{ goal_node(g, people) }}{% endfor %}
+  </ul>
+</section>
+{% endblock %}

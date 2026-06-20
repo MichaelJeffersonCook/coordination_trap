@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Work Graph · AI-Native Product OS{% endblock %}
+{% block nav_wg %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Work Graph</h1>
+  <p class="muted">The shared memory of the AI OS. {{ nodes|length }} nodes · {{ edges|length }} edges across {{ summary|length }} entity types.</p>
+</section>
+
+<section class="card">
+  <h2>Entity counts</h2>
+  <div class="chips">
+    {% for type, count in summary.items() %}
+    <span class="chip">{{ type }} <b>{{ count }}</b></span>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="card">
+  <h2>Nodes</h2>
+  <table class="tbl">
+    <tr><th>ID</th><th>Type</th><th>Title</th><th>Status</th></tr>
+    {% for n in nodes %}
+    <tr><td><code>{{ n.id }}</code></td><td><span class="chip">{{ n.type }}</span></td><td>{{ n.title }}</td><td>{{ n.status }}</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section class="card">
+  <h2>Relationships</h2>
+  <table class="tbl">
+    <tr><th>Source</th><th>Relation</th><th>Target</th></tr>
+    {% for e in edges %}
+    <tr><td><code>{{ e.src }}</code></td><td><span class="rel">{{ e.rel }}</span></td><td><code>{{ e.dst }}</code></td></tr>
+    {% endfor %}
+  </table>
+</section>
+{% endblock %}

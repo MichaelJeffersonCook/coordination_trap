@@ -1,0 +1,85 @@
+{
+  "_source": "Event planning sheets + Attio (Events, Lists) + invitation tracker",
+  "nodes": [
+    {
+      "id": "theme:curve-2027", "type": "theme", "title": "Future of Frontier AI Governance", "status": "active",
+      "data": {"event": "event:curve-2027"}
+    },
+    {
+      "id": "event:curve-2027", "type": "event", "title": "The Curve 2027", "status": "at_risk",
+      "data": {"kind": "conference", "theme": "Future of Frontier AI Governance", "location": "San Francisco",
+               "date": "2027-05-18", "rsvp_deadline": "2027-04-30",
+               "target_attendance": 250, "capacity": 260,
+               "invited": 372, "accepted": 168, "declined": 44, "no_response": 160,
+               "confirmed_speakers": 2, "target_speakers": 6},
+      "edges": [{"rel": "discusses", "dst": "topic:frontier-governance"},
+                {"rel": "discusses", "dst": "topic:eval-standards"},
+                {"rel": "discusses", "dst": "topic:compute-governance"},
+                {"rel": "discusses", "dst": "topic:intl-coordination"},
+                {"rel": "includes", "dst": "person:dario", "data": {"speaker_status": "confirmed", "slot": "keynote_candidate"}},
+                {"rel": "includes", "dst": "person:yoshua", "data": {"speaker_status": "confirmed"}},
+                {"rel": "includes", "dst": "person:helen", "data": {"speaker_status": "confirmed"}},
+                {"rel": "includes", "dst": "person:fei-fei", "data": {"speaker_status": "invited"}},
+                {"rel": "includes", "dst": "person:demis", "data": {"speaker_status": "invited"}}]
+    },
+    {
+      "id": "event:curve-2026", "type": "event", "title": "The Curve 2026 (past)", "status": "completed",
+      "data": {"kind": "conference", "location": "San Francisco", "date": "2026-05-20", "attendance": 210}
+    },
+    {
+      "id": "event:sf-dinner-evals", "type": "event", "title": "SF Dinner: Evaluation Standards", "status": "confirmed",
+      "data": {"kind": "dinner", "location": "San Francisco", "date": "2027-04-29", "target_attendance": 14, "accepted": 11, "no_response": 3},
+      "edges": [{"rel": "discusses", "dst": "topic:eval-standards"}]
+    },
+
+    {"id": "topic:frontier-governance", "type": "topic", "title": "Frontier AI governance frameworks", "status": "active", "data": {"heat": "high"}},
+    {"id": "topic:eval-standards", "type": "topic", "title": "Evaluation & safety-testing standards", "status": "active", "data": {"heat": "high"}},
+    {"id": "topic:compute-governance", "type": "topic", "title": "Compute governance & thresholds", "status": "active", "data": {"heat": "medium"}},
+    {"id": "topic:open-weights", "type": "topic", "title": "Open-weight model release norms", "status": "active", "data": {"heat": "high", "note": "Contested; needs the open-weights viewpoint in the room."}},
+    {"id": "topic:intl-coordination", "type": "topic", "title": "International coordination & treaties", "status": "active", "data": {"heat": "medium"}},
+    {"id": "topic:liability", "type": "topic", "title": "Liability & the frontier-model oversight bill", "status": "proposed", "data": {"heat": "rising", "proposed_by": "topic_development_agent"}},
+
+    {"id": "inv:dario", "type": "invitation", "title": "Invite: Dario → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-02", "channel": "personal", "owner": "person:steve"}, "edges": [{"rel": "sent_to", "dst": "person:dario"}]},
+    {"id": "inv:demis", "type": "invitation", "title": "Invite: Demis → Curve 2027", "status": "no_response",
+     "data": {"sent": "2027-03-02", "channel": "personal", "owner": "person:steve", "vip": true, "days_since_sent": 50}, "edges": [{"rel": "sent_to", "dst": "person:demis"}]},
+    {"id": "inv:bret", "type": "invitation", "title": "Invite: Bret → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-05", "owner": "person:taren"}, "edges": [{"rel": "sent_to", "dst": "person:bret"}]},
+    {"id": "inv:helen", "type": "invitation", "title": "Invite: Helen → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-05", "owner": "person:steve"}, "edges": [{"rel": "sent_to", "dst": "person:helen"}]},
+    {"id": "inv:eu-official", "type": "invitation", "title": "Invite: Lucia (EU AI Office) → Curve 2027", "status": "no_response",
+     "data": {"sent": "2027-03-10", "owner": "person:taren", "vip": true, "international": true, "days_since_sent": 42}, "edges": [{"rel": "sent_to", "dst": "person:eu-official"}]},
+    {"id": "inv:fei-fei", "type": "invitation", "title": "Invite: Fei → Curve 2027", "status": "no_response",
+     "data": {"sent": "2027-03-12", "owner": "person:steve", "vip": true, "days_since_sent": 40}, "edges": [{"rel": "sent_to", "dst": "person:fei-fei"}]},
+    {"id": "inv:a16z", "type": "invitation", "title": "Invite: Marcus (a16z) → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-14", "owner": "person:taren"}, "edges": [{"rel": "sent_to", "dst": "person:a16z-partner"}]},
+    {"id": "inv:rand", "type": "invitation", "title": "Invite: Priya (RAND) → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-14", "owner": "person:jon"}, "edges": [{"rel": "sent_to", "dst": "person:rand-fellow"}]},
+    {"id": "inv:openphil", "type": "invitation", "title": "Invite: Alondra (Open Phil) → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-15", "owner": "person:taren"}, "edges": [{"rel": "sent_to", "dst": "person:openphil-lead"}]},
+    {"id": "inv:uk-aisi", "type": "invitation", "title": "Invite: Oliver (UK AISI) → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-15", "owner": "person:taren", "international": true}, "edges": [{"rel": "sent_to", "dst": "person:uk-aisi"}]},
+    {"id": "inv:yoshua", "type": "invitation", "title": "Invite: Yoshua (Mila) → Curve 2027", "status": "accepted",
+     "data": {"sent": "2027-03-08", "owner": "person:steve", "international": true}, "edges": [{"rel": "sent_to", "dst": "person:yoshua"}]},
+    {"id": "inv:info", "type": "invitation", "title": "Invite: Dana (The Information) → Curve 2027", "status": "sent",
+     "data": {"sent": "2027-04-12", "owner": "person:jon", "note": "Participant under Chatham House Rule."}, "edges": [{"rel": "sent_to", "dst": "person:info-reporter"}]},
+
+    {"id": "rsvp:dario", "type": "rsvp", "title": "RSVP: Dario — Yes", "status": "yes", "data": {"event": "event:curve-2027"}, "edges": [{"rel": "relates_to", "dst": "person:dario"}]},
+    {"id": "rsvp:helen", "type": "rsvp", "title": "RSVP: Helen — Yes", "status": "yes", "data": {"event": "event:curve-2027"}, "edges": [{"rel": "relates_to", "dst": "person:helen"}]},
+    {"id": "rsvp:demis", "type": "rsvp", "title": "RSVP: Demis — Pending", "status": "pending", "data": {"event": "event:curve-2027"}, "edges": [{"rel": "relates_to", "dst": "person:demis"}]},
+
+    {"id": "att:dario-2026", "type": "attendance", "title": "Dario attended The Curve 2026", "status": "attended", "data": {"event": "event:curve-2026"}, "edges": [{"rel": "attends", "dst": "person:dario"}]},
+    {"id": "att:helen-2026", "type": "attendance", "title": "Helen attended The Curve 2026", "status": "attended", "data": {"event": "event:curve-2026"}, "edges": [{"rel": "attends", "dst": "person:helen"}]},
+    {"id": "att:feifei-2026", "type": "attendance", "title": "Fei attended The Curve 2026", "status": "attended", "data": {"event": "event:curve-2026"}, "edges": [{"rel": "attends", "dst": "person:fei-fei"}]},
+
+    {"id": "followup:dario-senate", "type": "follow_up", "title": "Introduce Dario to Sara (Senate AI staff) on the oversight bill", "status": "open",
+     "data": {"due": "2027-04-25", "from_event": "event:curve-2026", "owner": "person:jon"}, "edges": [{"rel": "assigned_to", "dst": "person:jon"}]},
+    {"id": "followup:helen-memo", "type": "follow_up", "title": "Send Helen the compute-governance memo she requested", "status": "overdue",
+     "data": {"due": "2027-04-14", "from_event": "event:sf-dinner-evals", "owner": "person:jon"}, "edges": [{"rel": "assigned_to", "dst": "person:jon"}]},
+    {"id": "followup:feifei-salon", "type": "follow_up", "title": "Invite Fei to co-host a research salon in the fall", "status": "open",
+     "data": {"due": "2027-05-01", "from_event": "event:curve-2026", "owner": "person:steve"}, "edges": [{"rel": "assigned_to", "dst": "person:steve"}]},
+
+    {"id": "intro:helen-uk", "type": "introduction", "title": "Introduced Helen ↔ Oliver (UK AISI) at Curve 2026", "status": "made",
+     "data": {"event": "event:curve-2026"}, "edges": [{"rel": "introduced_to", "dst": "person:helen"}, {"rel": "introduced_to", "dst": "person:uk-aisi"}]}
+  ]
+}

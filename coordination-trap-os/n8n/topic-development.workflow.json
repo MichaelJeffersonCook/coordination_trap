@@ -1,0 +1,21 @@
+{
+  "name": "Topic Development",
+  "nodes": [
+    {"parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 8 * * 1"}]}},
+     "id": "sched", "name": "Weekly (Mon 08:00)", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.1, "position": [220, 300]},
+    {"parameters": {"method": "GET", "url": "http://host.docker.internal:8000/mock/sources/news", "options": {}},
+     "id": "news", "name": "Fetch news + research (mock)", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [460, 300],
+     "notes": "Replace with RSS / arXiv / policy-tracker nodes."},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/topic-development/run", "options": {}},
+     "id": "td", "name": "Run Topic Development", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [720, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-program", "mode": "name"},
+       "text": "=Topic & speaker ideas this week:\n{{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Post topic ideas", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [980, 300]}
+  ],
+  "connections": {
+    "Weekly (Mon 08:00)": {"main": [[{"node": "Fetch news + research (mock)", "type": "main", "index": 0}]]},
+    "Fetch news + research (mock)": {"main": [[{"node": "Run Topic Development", "type": "main", "index": 0}]]},
+    "Run Topic Development": {"main": [[{"node": "Post topic ideas", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

@@ -1,0 +1,102 @@
+{
+  "_source": "OKR / strategy system — authored in-OS or synced via n8n",
+  "nodes": [
+    {
+      "id": "goal:company-frontier-connections",
+      "type": "goal",
+      "title": "Build stronger connections across frontier AI labs",
+      "status": "active",
+      "data": {"scope": "company", "level": 0, "metric": "frontier_lab_principals_engaged", "target": "all major labs represented at principal level", "owner_role": "President"},
+      "edges": [{"rel": "owned_by", "dst": "person:steve"},
+                {"rel": "cascades_to", "dst": "goal:dept-curve-quality"}]
+    },
+    {
+      "id": "goal:company-policy-participation",
+      "type": "goal",
+      "title": "Increase policy & governance participation",
+      "status": "active",
+      "data": {"scope": "company", "level": 0, "metric": "policymakers_engaged", "target": "+50% senior policymakers YoY", "owner_role": "CEO"},
+      "edges": [{"rel": "owned_by", "dst": "person:taren"},
+                {"rel": "cascades_to", "dst": "goal:dept-network-growth"}]
+    },
+    {
+      "id": "goal:company-viewpoint-diversity",
+      "type": "goal",
+      "title": "Improve diversity of viewpoints across convenings",
+      "status": "active",
+      "data": {"scope": "company", "level": 0, "metric": "viewpoint_balance_index", "target": "no community >35% of any room", "owner_role": "President"},
+      "edges": [{"rel": "owned_by", "dst": "person:steve"},
+                {"rel": "cascades_to", "dst": "goal:dept-curve-quality"}]
+    },
+    {
+      "id": "goal:dept-curve-quality",
+      "type": "goal",
+      "title": "Make The Curve 2027 the definitive frontier-governance convening",
+      "status": "active",
+      "data": {"scope": "department", "department": "Program", "owner_role": "President"},
+      "edges": [{"rel": "owned_by", "dst": "person:steve"},
+                {"rel": "cascades_to", "dst": "goal:role-speakers"},
+                {"rel": "cascades_to", "dst": "goal:role-balance"},
+                {"rel": "cascades_to", "dst": "goal:role-intl"}]
+    },
+    {
+      "id": "goal:dept-network-growth",
+      "type": "goal",
+      "title": "Grow international and policy participation in the network",
+      "status": "active",
+      "data": {"scope": "department", "department": "Growth", "owner_role": "CEO"},
+      "edges": [{"rel": "owned_by", "dst": "person:taren"}]
+    },
+    {
+      "id": "goal:dept-ops-excellence",
+      "type": "goal",
+      "title": "Flawless invitation → RSVP → execution pipeline",
+      "status": "active",
+      "data": {"scope": "department", "department": "Operations", "owner_role": "COO"},
+      "edges": [{"rel": "owned_by", "dst": "person:jon"},
+                {"rel": "cascades_to", "dst": "goal:role-rsvp-target"},
+                {"rel": "cascades_to", "dst": "goal:role-followups"}]
+    },
+    {
+      "id": "goal:role-speakers",
+      "type": "goal",
+      "title": "Confirm 6 frontier-lab principals as Curve speakers",
+      "status": "active",
+      "data": {"scope": "role", "owner_role": "President", "metric": "confirmed_principal_speakers", "target": 6},
+      "edges": [{"rel": "owned_by", "dst": "person:steve"}]
+    },
+    {
+      "id": "goal:role-balance",
+      "type": "goal",
+      "title": "Hold viewpoint balance: no community above 35% of attendees",
+      "status": "active",
+      "data": {"scope": "role", "owner_role": "President", "metric": "max_community_share", "target": "<=35%"},
+      "edges": [{"rel": "owned_by", "dst": "person:steve"}]
+    },
+    {
+      "id": "goal:role-intl",
+      "type": "goal",
+      "title": "Reach 20% international participation at The Curve",
+      "status": "draft",
+      "data": {"scope": "role", "owner_role": "CEO", "metric": "intl_share", "target": "20%", "proposed_by": "strategy_agent",
+               "rationale": "Drafted by the Strategy Agent from the network-growth goal; awaiting CEO review."},
+      "edges": [{"rel": "owned_by", "dst": "person:taren"}]
+    },
+    {
+      "id": "goal:role-rsvp-target",
+      "type": "goal",
+      "title": "Reach 250 confirmed RSVPs by Apr 30",
+      "status": "active",
+      "data": {"scope": "role", "owner_role": "COO", "metric": "confirmed_rsvps", "target": 250, "deadline": "2027-04-30"},
+      "edges": [{"rel": "owned_by", "dst": "person:jon"}]
+    },
+    {
+      "id": "goal:role-followups",
+      "type": "goal",
+      "title": "Close 90% of post-event follow-ups within 2 weeks",
+      "status": "active",
+      "data": {"scope": "role", "owner_role": "COO", "metric": "followup_close_rate", "target": "90%"},
+      "edges": [{"rel": "owned_by", "dst": "person:jon"}]
+    }
+  ]
+}

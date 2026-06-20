@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Daily Brief · Golden Gate OS{% endblock %}
+{% block nav_brief %}active{% endblock %}
+{% macro section(s) %}
+  <div class="brief-section"><h3>{{ s.headline }}</h3>
+    <ul>{% for b in s.bullets %}<li>{{ b }}</li>{% endfor %}</ul>
+  </div>
+{% endmacro %}
+{% block content %}
+<section class="hero">
+  <h1>{{ brief.title }}</h1>
+  <p class="muted">{{ brief.org }} · {{ brief.prepared_for }} · {{ brief.for_date }}</p>
+  <p class="muted"><strong>Focus:</strong> {{ brief.event_focus }}</p>
+  <a class="btn" href="/briefing?refresh=true">↻ Regenerate</a>
+</section>
+
+<section class="card"><h2>What changed since yesterday</h2>
+  <ul class="feed">{% for c in brief.what_changed_since_yesterday %}<li><span class="src">{{ c.actor }}</span> {{ c.summary }}</li>{% endfor %}</ul>
+</section>
+
+<section class="card"><h2>1 · Event readiness</h2>{{ section(brief.event_readiness) }}</section>
+<section class="card"><h2>2 · Invitation status</h2>{{ section(brief.invitation_status) }}</section>
+
+<section class="card"><h2>3 · RSVP risks</h2>
+  <ul class="risks">{% for r in brief.rsvp_risks %}
+    <li class="sev-medium"><strong>{{ r.person }}</strong> — unanswered {{ r.days }}d · owner {{ r.owner }}</li>
+  {% else %}<li class="muted">None.</li>{% endfor %}</ul>
+</section>
+
+<section class="card"><h2>4 · Missing perspectives</h2>{{ section(brief.missing_perspectives) }}</section>
+
+<div class="grid2">
+  <section class="card"><h2>5 · Key attendees</h2>
+    <ul>{% for a in brief.key_attendees %}<li><strong>{{ a.name }}</strong> — <span class="muted small">{{ a.role }}</span></li>{% endfor %}</ul>
+  </section>
+  <section class="card"><h2>6 · Emerging leaders</h2>
+    <ul>{% for e in brief.emerging_leaders %}<li><strong>{{ e.name }}</strong><br><span class="muted small">{{ e.note }}</span></li>{% endfor %}</ul>
+  </section>
+</div>
+
+<section class="card"><h2>7 · AI ecosystem developments</h2>{{ section(brief.ai_ecosystem_developments) }}</section>
+
+<section class="card"><h2>8 · Recommended introductions</h2>
+  <ul>{% for i in brief.recommended_introductions %}
+    <li><strong>{{ i.a }} ↔ {{ i.b }}</strong> — <span class="muted small">{{ i.reason }}</span></li>
+  {% else %}<li class="muted">None.</li>{% endfor %}</ul>
+</section>
+
+<section class="card"><h2>9 · Follow-up opportunities</h2>
+  <table class="tbl"><tr><th>Follow-up</th><th>Owner</th><th>Due</th><th>Status</th></tr>
+  {% for f in brief.follow_up_opportunities %}
+  <tr><td>{{ f.title }}</td><td>{{ f.owner }}</td><td>{{ f.due }}</td><td class="{{ 'sev-row-high' if f.status=='overdue' else '' }}">{{ f.status }}</td></tr>
+  {% endfor %}</table>
+</section>
+
+<section class="card"><h2>10 · New risks</h2>
+  <ul class="risks">{% for r in brief.new_risks %}
+    <li class="sev-{{ r.severity }}"><span class="badge">{{ r.type }}</span> {{ r.title }}</li>
+  {% endfor %}</ul>
+</section>
+
+<section class="card decisions"><h2>11 · Decisions required</h2>
+  {% for b in brief.decisions_needed %}
+  <div class="decision-brief">
+    <h3>{{ b.issue }}</h3>
+    <p class="muted">Owner: <strong>{{ b.owner_role }}</strong> · Deadline: <strong>{{ b.deadline }}</strong></p>
+    <h4>Context</h4><ul>{% for c in b.context %}<li>{{ c }}</li>{% endfor %}</ul>
+    <h4>Options &amp; tradeoffs</h4>
+    <ul class="options">{% for o in b.options %}<li><strong>{{ o.option }}</strong><br><span class="muted">{{ o.tradeoffs }}</span></li>{% endfor %}</ul>
+    <div class="reco"><strong>Recommendation:</strong> {{ b.recommendation }}</div>
+    {% if b.strategic_alignment %}<p class="muted small">Advances: {{ b.strategic_alignment.advances_goals|join('; ') }}. Principle: {{ b.strategic_alignment.governing_principle }}</p>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+
+<section class="card"><h2>12 · Recommended actions</h2>
+  <table class="tbl"><tr><th>Action</th><th>Owner</th><th>Due</th><th>Why</th></tr>
+  {% for a in brief.recommended_actions %}
+  <tr><td>{{ a.action }}</td><td>{{ a.owner }}</td><td>{{ a.due }}</td><td class="muted small">{{ a.why }}</td></tr>
+  {% endfor %}</table>
+</section>
+
+<section class="card highlight"><h2>13 · Items requiring approval</h2>
+  {% for a in brief.items_requiring_approval %}
+  <div class="approval-mini"><strong>{{ a.title }}</strong><p class="muted small">{{ a.detail }}</p></div>
+  {% else %}<p class="muted">None pending.</p>{% endfor %}
+  <a class="btn" href="/approvals-ui">Go to approvals →</a>
+</section>
+{% endblock %}

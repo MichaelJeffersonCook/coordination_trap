@@ -1,0 +1,18 @@
+{
+  "name": "Post-Event Knowledge Capture",
+  "nodes": [
+    {"parameters": {"httpMethod": "POST", "path": "event-closed", "responseMode": "lastNode", "options": {}},
+     "id": "hook", "name": "Webhook: event closed", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [220, 300], "webhookId": "event-closed",
+     "notes": "Fire this when an event ends (with notes / attendance attached)."},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/post-event-knowledge/run", "options": {}},
+     "id": "pek", "name": "Run Post-Event Knowledge", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [480, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-ops", "mode": "name"},
+       "text": "=Event captured. Open & overdue follow-ups:\n{{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Post follow-up summary", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [740, 300]}
+  ],
+  "connections": {
+    "Webhook: event closed": {"main": [[{"node": "Run Post-Event Knowledge", "type": "main", "index": 0}]]},
+    "Run Post-Event Knowledge": {"main": [[{"node": "Post follow-up summary", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

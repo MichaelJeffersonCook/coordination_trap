@@ -1,0 +1,52 @@
+{
+  "name": "Executive Brief Generation",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "cronExpression", "expression": "0 7 * * 1-5"}]}},
+      "id": "schedule", "name": "Every weekday 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.1, "position": [220, 320]
+    },
+    {
+      "parameters": {"method": "GET", "url": "http://host.docker.internal:8000/mock/sources/attio", "options": {}},
+      "id": "attio", "name": "Fetch Attio (mock)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [440, 200]
+    },
+    {
+      "parameters": {"method": "GET", "url": "http://host.docker.internal:8000/mock/sources/news", "options": {}},
+      "id": "news", "name": "Fetch AI news (mock)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [440, 320]
+    },
+    {
+      "parameters": {"method": "GET", "url": "http://host.docker.internal:8000/mock/sources/sheets", "options": {}},
+      "id": "sheets", "name": "Fetch event sheets (mock)",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [440, 440]
+    },
+    {
+      "parameters": {
+        "method": "POST", "url": "http://host.docker.internal:8000/webhooks/n8n/daily-intelligence",
+        "sendBody": true, "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ attio: $node[\"Fetch Attio (mock)\"].json, news: $node[\"Fetch AI news (mock)\"].json, sheets: $node[\"Fetch event sheets (mock)\"].json }) }}",
+        "options": {}
+      },
+      "id": "run", "name": "Run Agent Pipeline",
+      "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [720, 320]
+    },
+    {
+      "parameters": {
+        "select": "channel", "channelId": {"__rl": true, "value": "#gg-leadership", "mode": "name"},
+        "text": "={{ $json.slack_message }}", "otherOptions": {}
+      },
+      "id": "slack", "name": "Post Brief to Slack",
+      "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [980, 320],
+      "notesInFlow": true, "notes": "Needs Slack creds. Disable to run end-to-end without Slack; the brief is also at GET /briefings/latest and on the dashboard."
+    }
+  ],
+  "connections": {
+    "Every weekday 07:00": {"main": [[{"node": "Fetch Attio (mock)", "type": "main", "index": 0}, {"node": "Fetch AI news (mock)", "type": "main", "index": 0}, {"node": "Fetch event sheets (mock)", "type": "main", "index": 0}]]},
+    "Fetch Attio (mock)": {"main": [[{"node": "Run Agent Pipeline", "type": "main", "index": 0}]]},
+    "Fetch AI news (mock)": {"main": [[{"node": "Run Agent Pipeline", "type": "main", "index": 0}]]},
+    "Fetch event sheets (mock)": {"main": [[{"node": "Run Agent Pipeline", "type": "main", "index": 0}]]},
+    "Run Agent Pipeline": {"main": [[{"node": "Post Brief to Slack", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

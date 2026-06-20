@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Partner Inboxes · Golden Gate OS{% endblock %}
+{% block nav_partners %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Partner Agents</h1>
+  <p class="muted">Level 2 — one partner agent per role, each the human's interface to the org. Open a partner to work its inbox (it lives on the role).</p>
+</section>
+
+<section class="card">
+  <div class="chips">
+    {% for r in roles %}
+    {% set c = counts.get(r.id, {"open":0,"total":0}) %}
+    <a class="lvl-card c2" href="/roles/{{ r.id }}">
+      <strong>{{ r.data.partner_agent }}</strong>
+      <span class="muted small">for {{ r.title }} · {{ r.data.person_name }}</span>
+      <span class="badge {{ 'sev-high' if c.open else 'sev-low' }}">{{ c.open }} open · {{ c.total }} total</span>
+    </a>
+    {% endfor %}
+  </div>
+  <p class="muted small" style="margin-top:12px">Each partner agent is created automatically with its role on the <a href="/roles">Roles</a> tab.</p>
+</section>
+{% endblock %}

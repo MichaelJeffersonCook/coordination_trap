@@ -1,0 +1,18 @@
+{
+  "name": "Event Matching",
+  "nodes": [
+    {"parameters": {"httpMethod": "POST", "path": "match-attendees", "responseMode": "lastNode", "options": {}},
+     "id": "hook", "name": "Webhook: build attendee list", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [220, 300], "webhookId": "match-attendees",
+     "notes": "POST {event_id} to kick off attendee matching for an event."},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/event-matching/run", "options": {}},
+     "id": "em", "name": "Run Event Matching", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [480, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-program", "mode": "name"},
+       "text": "=Recommended attendees:\n{{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Post ranked attendee list", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [740, 300]}
+  ],
+  "connections": {
+    "Webhook: build attendee list": {"main": [[{"node": "Run Event Matching", "type": "main", "index": 0}]]},
+    "Run Event Matching": {"main": [[{"node": "Post ranked attendee list", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

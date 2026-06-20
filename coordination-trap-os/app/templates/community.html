@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Community Overview · Golden Gate OS{% endblock %}
+{% block nav_community %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Community Overview</h1>
+  <p class="muted">The AI-ecosystem communities the Institute convenes, with current network coverage vs target share.</p>
+</section>
+
+<section class="card">
+  <h2>Communities &amp; coverage</h2>
+  <table class="tbl">
+    <tr><th>Community</th><th>People in network</th><th>Target share</th><th>Priority</th></tr>
+    {% for c in communities %}
+    <tr>
+      <td><strong>{{ c.community.title }}</strong></td>
+      <td>{{ c.count }}</td>
+      <td>{{ "{:.0%}".format(c.target) }}</td>
+      <td><span class="badge sev-{{ 'high' if c.community.data.priority=='high' else 'low' }}">{{ c.community.data.priority }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Frontier AI labs</h2>
+    <ul>{% for l in labs %}<li><strong>{{ l.title }}</strong> — <span class="muted small">{{ l.data.hq }}{% if l.data.note %} · {{ l.data.note }}{% endif %}</span></li>{% endfor %}</ul>
+  </section>
+  <section class="card">
+    <h2>Organizations</h2>
+    <ul>{% for o in orgs %}<li><strong>{{ o.title }}</strong> — <span class="muted small">{{ o.data.kind }} · {{ o.data.geo }}</span></li>{% endfor %}</ul>
+  </section>
+</div>
+{% endblock %}

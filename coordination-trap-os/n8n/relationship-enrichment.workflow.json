@@ -1,0 +1,18 @@
+{
+  "name": "Relationship Enrichment",
+  "nodes": [
+    {"parameters": {"httpMethod": "POST", "path": "attio-changed", "responseMode": "lastNode", "options": {}},
+     "id": "hook", "name": "Webhook: Attio record changed", "type": "n8n-nodes-base.webhook", "typeVersion": 2, "position": [220, 300], "webhookId": "attio-changed",
+     "notes": "Point an Attio webhook here (person updated / created)."},
+    {"parameters": {"method": "POST", "url": "http://host.docker.internal:8000/agents/relationship-intelligence/run", "options": {}},
+     "id": "ri", "name": "Run Relationship Intelligence", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [480, 300]},
+    {"parameters": {"select": "channel", "channelId": {"__rl": true, "value": "#gg-crm", "mode": "name"},
+       "text": "=Profile enrichment suggestions:\n{{ $json.narrative }}", "otherOptions": {}},
+     "id": "slack", "name": "Suggest enrichments", "type": "n8n-nodes-base.slack", "typeVersion": 2.2, "position": [740, 300]}
+  ],
+  "connections": {
+    "Webhook: Attio record changed": {"main": [[{"node": "Run Relationship Intelligence", "type": "main", "index": 0}]]},
+    "Run Relationship Intelligence": {"main": [[{"node": "Suggest enrichments", "type": "main", "index": 0}]]}
+  },
+  "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": false}, "pinData": {}
+}

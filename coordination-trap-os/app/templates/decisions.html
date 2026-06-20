@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Decisions · Golden Gate OS{% endblock %}
+{% block nav_dec %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Decisions</h1>
+  <p class="muted">Decision briefs prepared by the Decision Facilitator and the cross-functional risks behind them. Humans decide; agents prepare.</p>
+</section>
+
+<section class="card decisions">
+  <h2>Decision briefs</h2>
+  {% for b in brief.decisions_needed %}
+  <div class="decision-brief">
+    <h3>{{ b.issue }}</h3>
+    <p class="muted">Owner: <strong>{{ b.owner_role }}</strong> · Deadline: <strong>{{ b.deadline }}</strong></p>
+    <h4>Context</h4><ul>{% for c in b.context %}<li>{{ c }}</li>{% endfor %}</ul>
+    <h4>Options &amp; tradeoffs</h4>
+    <ul class="options">{% for o in b.options %}<li><strong>{{ o.option }}</strong><br><span class="muted">{{ o.tradeoffs }}</span></li>{% endfor %}</ul>
+    <div class="reco"><strong>Recommendation:</strong> {{ b.recommendation }}</div>
+  </div>
+  {% else %}<p class="muted">No open decisions.</p>{% endfor %}
+  <a class="btn" href="/approvals-ui">Approvals queue →</a>
+</section>
+
+<section class="card">
+  <h2>Risks behind the decisions</h2>
+  <table class="tbl">
+    <tr><th>Severity</th><th>Type</th><th>Risk</th></tr>
+    {% for r in brief.new_risks %}
+    <tr class="sev-row-{{ r.severity }}">
+      <td><span class="badge sev-{{ r.severity }}">{{ r.severity }}</span></td>
+      <td>{{ r.type }}</td><td>{{ r.title }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endblock %}

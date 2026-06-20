@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Executive Overview · Golden Gate OS{% endblock %}
+{% block nav_home %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Executive Overview</h1>
+  <p class="muted">{{ roll.prepared_for }} · {{ brief.for_date }}</p>
+  <p class="muted"><strong>Focus:</strong> {{ brief.event_focus }}</p>
+  <div class="kpis">
+    <div class="kpi kpi-act"><span class="num" style="font-size:20px">{{ roll.kpis.readiness }}</span><span>Event readiness</span></div>
+    <div class="kpi kpi-dep"><span class="num">{{ roll.kpis.missing_voices }}</span><span>Missing perspectives</span></div>
+    <div class="kpi kpi-risk"><span class="num">{{ brief.new_risks|length }}</span><span>New risks</span></div>
+    <div class="kpi kpi-dec"><span class="num">{{ brief.decisions_needed|length }}</span><span>Decisions needed</span></div>
+    <div class="kpi kpi-appr"><span class="num">{{ brief.items_requiring_approval|length }}</span><span>Awaiting approval</span></div>
+  </div>
+  <a class="btn" href="/briefing?refresh=true">↻ Regenerate brief</a>
+  <a class="btn btn-ghost" href="/briefing">Open full brief →</a>
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>What changed since yesterday</h2>
+    <ul class="feed">
+      {% for c in brief.what_changed_since_yesterday %}
+      <li><span class="src">{{ c.actor }}</span> {{ c.summary }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+  <section class="card">
+    <h2>Decisions needing an owner</h2>
+    {% for d in roll.decisions %}
+    <div class="approval-mini">
+      <strong>{{ d.issue }}</strong>
+      {% if d.needs_exec %}<span class="badge sev-high">exec</span>{% endif %}
+      <p class="muted small">Owner: {{ d.owner_role }} · due {{ d.deadline }}</p>
+    </div>
+    {% else %}<p class="muted">No open decisions.</p>{% endfor %}
+    <a class="btn btn-small" href="/decisions">Decision briefs →</a>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Company goals &amp; exposure</h2>
+  {% for c in roll.goal_cards %}
+  <div class="goal status-node-{{ 'draft' if c.exposure=='exposed' else 'active' }}">
+    <div class="goal-head">
+      <span class="chip scope-company">company</span>
+      <strong>{{ c.goal.title }}</strong>
+      <span class="badge sev-{{ 'high' if c.exposure=='exposed' else ('medium' if c.exposure=='watch' else 'low') }}">{{ c.exposure }}</span>
+      <span class="muted small">owner: {{ roll.people.get(c.owner, '—') }}</span>
+    </div>
+    {% if c.risks %}
+    <ul class="risks">{% for r in c.risks %}<li class="sev-{{ r.severity }}"><span class="badge">{{ r.type }}</span> {{ r.title }}</li>{% endfor %}</ul>
+    {% else %}<p class="muted small">No threats surfaced this cycle.</p>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+
+<div class="grid2">
+  <section class="card">
+    <h2>Key attendees confirmed</h2>
+    <ul>{% for a in brief.key_attendees %}<li><strong>{{ a.name }}</strong> — <span class="muted small">{{ a.role }}</span></li>{% endfor %}</ul>
+  </section>
+  <section class="card">
+    <h2>Emerging leaders</h2>
+    <ul>{% for e in brief.emerging_leaders %}<li><strong>{{ e.name }}</strong><br><span class="muted small">{{ e.note }}</span></li>{% endfor %}</ul>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Agent pipeline trace</h2>
+  <p class="muted small">How this briefing was produced — each agent runs as an organizational service.</p>
+  <ol class="trace">
+    {% for t in brief.agent_trace %}<li><span class="agent-tag">{{ t.role }}</span> {{ t.headline }}</li>{% endfor %}
+  </ol>
+</section>
+{% endblock %}

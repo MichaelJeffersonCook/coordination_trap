@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Service Agents · Golden Gate OS{% endblock %}
+{% block nav_services %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Shared Service Agents</h1>
+  <p class="muted">Level 3 — cross-cutting coordination services every partner agent draws on. <span class="dot on"></span> live in this prototype · <span class="dot off"></span> declared (wired next).</p>
+  <div class="related"><span class="muted small">What they produce:</span>
+    <a class="chip" href="/briefing">Daily Brief</a>
+    <a class="chip" href="/decisions">Decisions</a>
+    <a class="chip" href="/followups">Follow-Ups</a>
+    <a class="chip" href="/automations">↓ Automations they trigger</a>
+  </div>
+</section>
+
+{% for grp in ['Coordination', 'Domain'] %}
+<section class="card">
+  <h2>{{ grp }}</h2>
+  <table class="tbl">
+    <tr><th>Agent</th><th>Purpose</th><th>Systems</th><th></th></tr>
+    {% for s in services if s.group == grp %}
+    <tr>
+      <td><span class="dot {{ 'on' if s.live else 'off' }}"></span><strong>{{ s.name }}</strong>
+        {% if s.backed_by %}<br><span class="muted small">code: {{ s.backed_by }}</span>{% endif %}</td>
+      <td>{{ s.purpose }}</td>
+      <td class="muted small">{{ s.systems|join(', ') }}</td>
+      <td>{% if s.live %}<span class="badge status-approved">live</span>{% else %}<span class="badge status-pending">declared</span>{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endfor %}
+{% endblock %}

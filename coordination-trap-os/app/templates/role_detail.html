@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}{{ role.title }} · Golden Gate OS{% endblock %}
+{% block nav_roles %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="muted small"><a href="/roles">← All roles</a></p>
+  <h1>{{ role.title }}</h1>
+  <p class="muted">{{ role.data.person_name }} · <span class="lvl">L1</span> human role + <span class="lvl">L2</span> partner agent</p>
+</section>
+
+<!-- L1: the job description -->
+<section class="card">
+  <div class="goal-head"><span class="chip c1">L1 · role</span><strong>Job description</strong></div>
+  <div class="grid2" style="margin-top:10px">
+    <div>
+      <h4 class="attr-h">Responsibilities</h4>
+      <ul>{% for x in role.data.responsibilities %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+    <div>
+      <h4 class="attr-h">Decision authority</h4>
+      <ul>{% for x in role.data.decision_authority %}<li>{{ x }}</li>{% endfor %}</ul>
+      <h4 class="attr-h">Owns goals</h4>
+      <ul>{% for g in role.data.owns %}<li>{{ goal_titles.get(g, g) }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+  <details class="ctx-history" style="margin-top:8px">
+    <summary class="muted small">✎ edit / delete</summary>
+    <form method="post" action="/roles-ui/save" class="goal-add" style="margin-top:10px">
+      <input type="hidden" name="id" value="{{ role.id }}">
+      <input type="text" name="title" value="{{ role.title }}" required>
+      <input type="text" name="person_name" value="{{ role.data.person_name }}">
+      <input type="text" name="partner_agent" value="{{ role.data.partner_agent }}">
+      <textarea name="responsibilities" rows="4">{{ role.data.responsibilities|join('\n') }}</textarea>
+      <textarea name="decision_authority" rows="3">{{ role.data.decision_authority|join('\n') }}</textarea>
+      <button class="btn btn-small">Save changes</button>
+    </form>
+    <form method="post" action="/roles-ui/{{ role.id }}/delete" style="margin-top:8px">
+      <button class="btn btn-small btn-reject">Delete role &amp; its partner</button>
+    </form>
+  </details>
+</section>
+
+<!-- L2: the partner agent, living right here under the role -->
+<section class="card">
+  <div class="goal-head">
+    <span class="chip c2">L2 · partner agent</span>
+    <strong>{{ role.data.partner_agent }}</strong>
+    <span class="badge {{ 'sev-high' if counts.open else 'sev-low' }}">{{ counts.open }} open · {{ counts.total }} total</span>
+  </div>
+  <p class="muted small">{{ role.data.partner_blurb }}</p>
+  <form method="post" action="/partners/rebuild" style="margin-top:8px">
+    <input type="hidden" name="back" value="/roles/{{ role.id }}">
+    <button class="btn btn-small btn-ghost">↻ Re-scan for new events</button>
+  </form>
+</section>
+
+{% for e in events %}
+<section class="card event-card sev-row-{{ e.data.severity }}">
+  <div class="goal-head">
+    <span class="badge sev-{{ e.data.severity }}">{{ e.data.severity }}</span>
+    <span class="agent-tag">{{ e.data.source_agent }}</span>
+    {% if e.data.escalated and e.data.status=='new' %}<span class="badge sev-high">escalated</span>{% endif %}
+    <strong>{{ e.title }}</strong>
+  </div>
+  {% if e.data.detail %}<p class="muted small">{{ e.data.detail }}</p>{% endif %}
+  {% if e.data.status == 'new' %}
+  <div class="rec-row">
+    <span class="muted small">Recommended:</span>
+    {% for rec in e.data.recommendations %}
+    <form method="post" action="/partners/{{ e.id }}/respond" class="inline-form">
+      <input type="hidden" name="back" value="/roles/{{ role.id }}">
+      <input type="hidden" name="action" value="accept">
+      <input type="hidden" name="rec_index" value="{{ loop.index0 }}">
+      <button class="btn btn-small btn-approve">{{ rec.label }}</button>
+    </form>
+    {% endfor %}
+    <form method="post" action="/partners/{{ e.id }}/respond" class="inline-form">
+      <input type="hidden" name="back" value="/roles/{{ role.id }}">
+      <input type="hidden" name="action" value="ignore">
+      <button class="btn btn-small btn-ghost">Ignore</button>
+    </form>
+  </div>
+  <form method="post" action="/partners/{{ e.id }}/respond" class="custom-form">
+    <input type="hidden" name="back" value="/roles/{{ role.id }}">
+    <input type="hidden" name="action" value="custom">
+    <input type="text" name="response" placeholder="…or write your own response">
+    <button class="btn btn-small">Send</button>
+  </form>
+  {% else %}
+  <p class="resolved-line">
+    {% if e.data.status == 'accepted' %}<span class="badge status-approved">accepted</span> {{ e.data.chosen }}
+    {% elif e.data.status == 'responded' %}<span class="badge status-approved">responded</span> “{{ e.data.response }}”
+    {% else %}<span class="badge status-rejected">ignored</span>{% endif %}
+  </p>
+  {% endif %}
+</section>
+{% else %}
+<section class="card"><p class="muted">Inbox clear — nothing needs {{ role.data.person_name }} right now.</p></section>
+{% endfor %}
+{% endblock %}

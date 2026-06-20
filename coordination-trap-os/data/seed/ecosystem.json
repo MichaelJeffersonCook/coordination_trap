@@ -1,0 +1,24 @@
+{
+  "_source": "AI news feeds + research publications + policy trackers (public web)",
+  "nodes": [
+    {"id": "pub:eval-bench", "type": "publication", "title": "New frontier dangerous-capability eval suite released", "status": "active",
+     "data": {"venue": "METR-style consortium", "date": "2027-04-15", "heat": "high"},
+     "edges": [{"rel": "related_to", "dst": "topic:eval-standards"}]},
+    {"id": "pub:compute-report", "type": "publication", "title": "Compute-governance thresholds: a policy report", "status": "active",
+     "data": {"venue": "RAND", "date": "2027-04-10"},
+     "edges": [{"rel": "related_to", "dst": "topic:compute-governance"}, {"rel": "related_to", "dst": "person:rand-fellow"}]},
+    {"id": "pub:open-weights", "type": "publication", "title": "Open-weight release norms after the latest frontier drop", "status": "active",
+     "data": {"venue": "Lab blog + press", "date": "2027-04-18", "heat": "high"},
+     "edges": [{"rel": "related_to", "dst": "topic:open-weights"}]},
+    {"id": "pub:interp", "type": "publication", "title": "Mechanistic-interpretability result widely cited this quarter", "status": "active",
+     "data": {"venue": "arXiv", "date": "2027-04-08"},
+     "edges": [{"rel": "related_to", "dst": "topic:eval-standards"}, {"rel": "related_to", "dst": "person:emerging-interp"}]},
+
+    {"id": "policy:oversight-bill", "type": "policy_initiative", "title": "US Frontier Model Oversight Act (committee draft)", "status": "active",
+     "data": {"jurisdiction": "US Senate", "stage": "committee", "date": "2027-04-19", "heat": "rising"},
+     "edges": [{"rel": "related_to", "dst": "topic:liability"}, {"rel": "related_to", "dst": "person:emerging-policy"}]},
+    {"id": "policy:eu-codes", "type": "policy_initiative", "title": "EU AI Act codes of practice for frontier models", "status": "active",
+     "data": {"jurisdiction": "EU", "stage": "consultation", "date": "2027-04-11"},
+     "edges": [{"rel": "related_to", "dst": "topic:frontier-governance"}, {"rel": "related_to", "dst": "person:eu-official"}]}
+  ]
+}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Approvals · AI-Native Product OS{% endblock %}
+{% block nav_appr %}active{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Human Approval Flow</h1>
+  <p class="muted">The judgment layer. Agents prepare and push; humans decide. Approving updates the decision node in the Work Graph.</p>
+</section>
+
+<section class="card">
+  <h2>Approval queue</h2>
+  {% for a in approvals %}
+  <div class="approval {{ 'resolved' if a.status != 'pending' else '' }}">
+    <div class="approval-head">
+      <strong>{{ a.title }}</strong>
+      <span class="badge status-{{ a.status }}">{{ a.status }}</span>
+    </div>
+    <p class="muted">Owner: {{ a.owner_role }} · raised by <code>{{ a.requested_by }}</code>
+      {% if a.related_node %}· <code>{{ a.related_node }}</code>{% endif %}</p>
+    <p>{{ a.detail }}</p>
+    {% if a.status == 'pending' %}
+    <form method="post" action="/approvals-ui/{{ a.id }}/resolve" class="approval-form">
+      <input type="text" name="note" placeholder="Optional note / rationale">
+      <button name="decision" value="approved" class="btn btn-approve">Approve</button>
+      <button name="decision" value="rejected" class="btn btn-reject">Reject</button>
+    </form>
+    {% else %}
+    <p class="muted small">Resolved by {{ a.resolved_by }} at {{ a.resolved_at }}{% if a.note %} — “{{ a.note }}”{% endif %}</p>
+    {% endif %}
+  </div>
+  {% else %}
+  <p class="muted">No approvals yet. Generate a daily brief to populate the queue.</p>
+  {% endfor %}
+</section>
+{% endblock %}

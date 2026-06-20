@@ -1,0 +1,39 @@
+{
+  "_source": "Org design — human roles & their job descriptions (CRUD-managed in-OS)",
+  "nodes": [
+    {
+      "id": "role:president", "type": "role", "title": "Founder & President", "status": "active",
+      "data": {
+        "person": "person:steve", "person_name": "Steve Newman",
+        "partner_agent": "Program Partner",
+        "partner_blurb": "Curates the field, the room, and the program so Steve only decides what belongs.",
+        "responsibilities": ["Event themes", "Discussion topics", "Speaker selection",
+                              "Thought leadership", "Community development", "Strategic relationships"],
+        "owns": ["goal:company-frontier-connections", "goal:dept-curve-quality", "goal:company-viewpoint-diversity"],
+        "decision_authority": ["Keynote & speaker selection", "Viewpoint balance of the room", "Event themes & topics"]
+      }
+    },
+    {
+      "id": "role:ceo", "type": "role", "title": "CEO", "status": "active",
+      "data": {
+        "person": "person:taren", "person_name": "Taren Stinebrickner-Kauffman",
+        "partner_agent": "Strategy Partner",
+        "partner_blurb": "Keeps goals, growth, and partnerships in view so Taren works on direction, not data.",
+        "responsibilities": ["Organizational strategy", "Partnerships", "Growth", "Fundraising", "Mission alignment"],
+        "owns": ["goal:company-policy-participation", "goal:dept-network-growth"],
+        "decision_authority": ["Partnerships", "Goal ratification", "Growth & fundraising bets"]
+      }
+    },
+    {
+      "id": "role:coo", "type": "role", "title": "COO & Head of Operations", "status": "active",
+      "data": {
+        "person": "person:jon", "person_name": "Jon Finley",
+        "partner_agent": "Operations Partner",
+        "partner_blurb": "Runs the invitation→RSVP→execution pipeline so Jon makes calls, not spreadsheets.",
+        "responsibilities": ["Event execution", "CRM operations", "Invitation management", "Logistics", "Workflow management"],
+        "owns": ["goal:dept-ops-excellence", "goal:role-rsvp-target", "goal:role-followups"],
+        "decision_authority": ["Capacity & logistics", "Follow-up prioritization", "CRM operations"]
+      }
+    }
+  ]
+}
