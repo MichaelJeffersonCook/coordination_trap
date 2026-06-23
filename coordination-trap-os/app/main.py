@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, Form, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -15,6 +16,16 @@ from . import agents, briefing, config, context_builder as cb, db, executive, in
 from . import workgraph as wg
 
 app = FastAPI(title="Golden Gate :: AI-Native Relationship & Events OS", version="0.2.0")
+
+# Allow a browser front end (e.g. a v0 / Vercel app) to call the API. With "*"
+# we must not also send credentials, which is fine for this no-auth prototype.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=config.CORS_ORIGINS,
+    allow_credentials="*" not in config.CORS_ORIGINS,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE = Path(__file__).resolve().parent
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
@@ -434,10 +445,20 @@ def services_page(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "services.html", {"services": registry.SERVICE_AGENTS})
 
 
+@app.get("/api/services")
+def api_services() -> dict[str, Any]:
+    return {"services": registry.SERVICE_AGENTS}
+
+
 @app.get("/automations", response_class=HTMLResponse)
 def automations_page(request: Request) -> HTMLResponse:
     return templates.TemplateResponse(request, "automations.html", {
         "workflows": registry.WORKFLOWS, "systems": registry.SYSTEMS})
+
+
+@app.get("/api/automations")
+def api_automations() -> dict[str, Any]:
+    return {"workflows": registry.WORKFLOWS, "systems": registry.SYSTEMS}
 
 
 @app.get("/briefing", response_class=HTMLResponse)

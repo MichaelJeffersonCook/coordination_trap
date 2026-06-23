@@ -31,3 +31,7 @@ OPENAI_MODEL = os.getenv("CTOS_OPENAI_MODEL", "gpt-4o")
 # "Today" for the prototype. Lets the demo be deterministic regardless of the
 # real wall clock. The Curve 2027 scenario sits ~4 weeks before the event.
 DEMO_TODAY = os.getenv("CTOS_DEMO_TODAY", "2027-04-21")
+
+# CORS origins allowed to call the API from a browser (e.g. a v0/Vercel front
+# end). Comma-separated; "*" allows any origin (fine for a no-auth prototype).
+CORS_ORIGINS = [o.strip() for o in os.getenv("CTOS_CORS_ORIGINS", "*").split(",") if o.strip()]
